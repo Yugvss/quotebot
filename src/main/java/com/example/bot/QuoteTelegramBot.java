@@ -17,8 +17,8 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
     private final String botUsername;
     private final QuoteService quoteService;
 
-    public QuoteTelegramBot(@Value("${bot.token}") String botToken,
-                            @Value("${bot.username}") String botUsername,
+    public QuoteTelegramBot(@Value("7657364648:AAG4PUBlXQDsGRCE9EtSsJzcj8in-gUYdGY") String botToken,
+                            @Value("@quotedays_bot") String botUsername,
                             QuoteService quoteService) {
         super(botToken);
         this.botUsername = botUsername;
