@@ -9,9 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.1.4</spring-boot.version> <!-- ЗАМЕНИТЕ НА АКТУАЛЬНУЮ ВЕРСИЮ Spring Boot -->
         <telegrambots.version>6.9.0</telegrambots.version> <!-- ЗАМЕНИТЕ НА АКТУАЛЬНУЮ ВЕРСИЮ TelegramBots -->
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -29,40 +32,43 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
+        <groupId>org.telegram</groupId>
+        <artifactId>telegrambots-spring-boot-starter</artifactId>
             <version>${telegrambots.version}</version>
         </dependency>
 
-        <!-- Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
-        <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-configuration-processor</artifactId>
-        <optional>true</optional>
-    </dependency>
-</dependencies>
 
-<build>
-<plugins>
-    <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-            <excludes>
-                <exclude>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclude>
-            </excludes>
-        </configuration>
-    </plugin>
-</plugins>
-</build>
-        </project>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
