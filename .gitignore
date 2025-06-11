@@ -1,0 +1,33 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+*.txt
+
+# BlueJ files
+*.ctxt
+
+# Package/Module Output Directories
+/target/
+/build/
+/out/
+
+# IntelliJ IDEA related files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# NetBeans
+/nbproject/
+
+# Eclipse
+.metadata/
+/bin/
+
+# Temporary files created by developers
+*.tmp
+*~
+# Environment configuration file for Spring Boot
+.env
