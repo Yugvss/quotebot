@@ -1,7 +1,7 @@
 // QuoteService.java
-package com.example.quotebot.service; // Предполагается, что ваш Service в пакете 'service'
+package com.example.service; // Предполагается, что ваш Service в пакете 'service'
 
-import com.example.quotebot.model.Quote; // * ОБЯЗАТЕЛЬНО УБЕДИТЕСЬ, ЧТО ЭТОТ ПАКЕТ ВЕРЕН *
+import com.example.model.Quote; // * ОБЯЗАТЕЛЬНО УБЕДИТЕСЬ, ЧТО ЭТОТ ПАКЕТ ВЕРЕН *
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

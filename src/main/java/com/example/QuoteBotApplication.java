@@ -1,4 +1,4 @@
-package com.example.quotebot;
+package com.example;
 
 import lombok.extern.slf4j.Slf4j; // Убедитесь, что эта строка есть
 import org.springframework.boot.SpringApplication;

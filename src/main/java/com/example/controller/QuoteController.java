@@ -1,7 +1,7 @@
-package com.example.quotebot.controller;
+package com.example.controller;
 
-import com.example.quotebot.model.Quote;
-import com.example.quotebot.service.QuoteService;
+import com.example.model.Quote;
+import com.example.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

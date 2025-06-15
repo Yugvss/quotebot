@@ -1,6 +1,6 @@
-package com.example.quotebot.repository;
+package com.example.repository;
 
-import com.example.quotebot.model.Quote;
+import com.example.model.Quote;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

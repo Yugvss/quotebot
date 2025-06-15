@@ -1,5 +1,5 @@
 // Quote.java
-package com.example.quotebot.model; // * ОБЯЗАТЕЛЬНО УБЕДИТЕСЬ, ЧТО ЭТОТ ПАКЕТ ВЕРЕН *
+package com.example.model; // * ОБЯЗАТЕЛЬНО УБЕДИТЕСЬ, ЧТО ЭТОТ ПАКЕТ ВЕРЕН *
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

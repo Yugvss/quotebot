@@ -1,11 +1,11 @@
 // QuoteTelegramBot.java
-package com.example.quotebot; // Или ваш пакет
+package com.example.bot; // Или ваш пакет
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import com.example.quotebot.service.QuoteService;
+import com.example.service.QuoteService;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
