@@ -1,7 +1,6 @@
 package com.example.quotebot;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,13 +14,12 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
 
     private final QuoteService quoteService;
 
-    @Value("${telegram.bot.token}")
+    @Value("${telegram.bot.token:test}")
     private String botToken;
 
-    @Value("${telegram.bot.username}")
+    @Value("${telegram.bot.username:test}")
     private String botName;
 
-    @Autowired
     public QuoteTelegramBot(QuoteService quoteService) {
         this.quoteService = quoteService;
     }
@@ -56,11 +54,11 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
                 }
             } else if (messageText.equals("/quote")) {
                 // Получаем случайную цитату из QuoteService
-                String quote = quoteService.getRandomQuote(); // Assuming you have this method in QuoteService
+                String quote = quoteService.getRandomQuote();
 
                 SendMessage message = new SendMessage();
                 message.setChatId(String.valueOf(chatId));
-                message.setText(quote);  // Отправляем цитату пользователю
+                message.setText(quote);
                 try {
                     execute(message);
                     log.info("Цитата отправлена chatId {}: {}", chatId);
@@ -68,8 +66,7 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
                     log.error("Ошибка при отправке цитаты chatId {}: {}", chatId, e.getMessage());
                 }
 
-            }
-            else {
+            } else {
                 SendMessage message = new SendMessage();
                 message.setChatId(String.valueOf(chatId));
                 message.setText("Я не понимаю эту команду.");
