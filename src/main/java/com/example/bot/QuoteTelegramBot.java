@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import com.example.service.QuoteService;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 @Slf4j
@@ -38,6 +40,19 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        // ... ваш код обработки обновлений
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String messageText = update.getMessage().getText();
+            long chatId = update.getMessage().getChatId();
+
+            SendMessage message = new SendMessage();
+            message.setChatId(String.valueOf(chatId));
+            message.setText("Вы сказали: " + messageText); // Простая заглушка
+
+            try {
+                execute(message); // Отправляем ответ
+            } catch (TelegramApiException e) {
+                e.printStackTrace(); // Логируйте ошибки отправки
+            }
+        }
     }
 }
