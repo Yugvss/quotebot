@@ -1,53 +1,29 @@
-package com.example.quotebot.service;
+package com.example.quotebot;
 
-import com.example.quotebot.model.Quote;
-import com.example.quotebot.repository.InMemoryQuoteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class QuoteService {
 
-    private final InMemoryQuoteRepository repository;
+    private final List<String> quotes = new ArrayList<>();
 
-    @Autowired
-    public QuoteService(InMemoryQuoteRepository repository) {
-        this.repository = repository;
+    public QuoteService() {
+        // Добавляем несколько цитат для примера
+        quotes.add("Будущее принадлежит тем, кто верит в красоту своей мечты. - Eleanor Roosevelt");
+        quotes.add("Единственный способ сделать великое дело - любить то, что ты делаешь. - Steve Jobs");
+        quotes.add("Жизнь - это то, что происходит с тобой, пока ты строишь другие планы. - John Lennon");
     }
 
-    public List<Quote> getAllQuotes() {
-        return repository.findAll();
-    }
-
-    public Optional<Quote> getQuoteById(Long id) {
-        return repository.findById(id);
-    }
-
-    public Quote createQuote(Quote quote) {
-        return repository.save(quote);
-    }
-
-    public Optional<Quote> updateQuote(Long id, Quote updatedQuote) {
-        return repository.findById(id)
-                .map(quote -> {
-                    quote.setText(updatedQuote.getText());
-                    quote.setAuthor(updatedQuote.getAuthor());
-                    return repository.save(quote);
-                });
-    }
-
-    public boolean deleteQuote(Long id) {
-        if (repository.findById(id).isPresent()) {
-            repository.deleteById(id);
-            return true;
+    public String getRandomQuote() {
+        if (quotes.isEmpty()) {
+            return "Нет доступных цитат.";
         }
-        return false;
-    }
-
-    public Optional<Quote> getRandomQuote() {
-        return repository.findRandom();
+        Random random = new Random();
+        int randomIndex = random.nextInt(quotes.size());
+        return quotes.get(randomIndex);
     }
 }

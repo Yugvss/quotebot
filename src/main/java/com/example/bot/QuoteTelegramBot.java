@@ -15,10 +15,10 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
 
     private final QuoteService quoteService;
 
-    @Value("7657364648:AAG4PUBlXQDsGRCE9EtSsJzcj8in-gUYdGY")
+    @Value("${telegram.bot.token}")
     private String botToken;
 
-    @Value("@quotedays_bot")
+    @Value("${telegram.bot.username}")
     private String botName;
 
     @Autowired
@@ -54,7 +54,22 @@ public class QuoteTelegramBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     log.error("Ошибка при отправке ответа chatId {}: {}", chatId, e.getMessage());
                 }
-            } else {
+            } else if (messageText.equals("/quote")) {
+                // Получаем случайную цитату из QuoteService
+                String quote = quoteService.getRandomQuote(); // Assuming you have this method in QuoteService
+
+                SendMessage message = new SendMessage();
+                message.setChatId(String.valueOf(chatId));
+                message.setText(quote);  // Отправляем цитату пользователю
+                try {
+                    execute(message);
+                    log.info("Цитата отправлена chatId {}: {}", chatId);
+                } catch (TelegramApiException e) {
+                    log.error("Ошибка при отправке цитаты chatId {}: {}", chatId, e.getMessage());
+                }
+
+            }
+            else {
                 SendMessage message = new SendMessage();
                 message.setChatId(String.valueOf(chatId));
                 message.setText("Я не понимаю эту команду.");
