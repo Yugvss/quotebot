@@ -1,14 +1,15 @@
-package com.example.quotebot.model;
+// Quote.java
+package com.example.quotebot.model; // * ОБЯЗАТЕЛЬНО УБЕДИТЕСЬ, ЧТО ЭТОТ ПАКЕТ ВЕРЕН *
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // Генерирует геттеры, сеттеры, toString, equals, hashCode
-@NoArgsConstructor // Генерирует конструктор без аргументов
-@AllArgsConstructor // Генерирует конструктор со всеми полями
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quote {
     private Long id;
     private String text;
-    private String author;
+    private String author; // Добавляем поле для автора, если оно используется
 }
