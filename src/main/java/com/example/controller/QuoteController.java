@@ -1,53 +1,32 @@
 package com.example.controller;
 
-import com.example.model.Quote;
+import com.example.dto.QuoteDTO;
 import com.example.service.QuoteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/quotes")
+@RestController // REST контроллер
+@RequestMapping("/quotes") // Базовый путь для всех эндпоинтов
+@RequiredArgsConstructor // Автоматически инжектит QuoteService
+@Slf4j
 public class QuoteController {
 
     private final QuoteService quoteService;
 
-    @Autowired
-    public QuoteController(QuoteService quoteService) {
-        this.quoteService = quoteService;
+    @GetMapping("/random") // GET-запрос на /quotes/random
+    public ResponseEntity<QuoteDTO> getRandomQuote() {
+        log.info("Получен запрос на /quotes/random");
+        QuoteDTO randomQuote = quoteService.getRandomQuote();
+        return ResponseEntity.ok(randomQuote); // Возвращаем HTTP 200 OK
     }
 
-    @GetMapping
-    public List<Quote> getAllQuotes() {
-        return quoteService.getAllQuotes();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Quote> getQuoteById(@PathVariable Long id) {
-        return quoteService.getQuoteById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Quote createQuote(@RequestBody Quote quote) {
-        return quoteService.createQuote(quote);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Quote> updateQuote(@PathVariable Long id, @RequestBody Quote quote) {
-        return quoteService.updateQuote(id, quote)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuote(@PathVariable Long id) {
-        if (quoteService.deleteQuote(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @PostMapping // POST-запрос на /quotes
+    public ResponseEntity<QuoteDTO> addQuote(@RequestBody QuoteDTO quoteDTO) {
+        log.info("Получен запрос на добавление цитаты: {}", quoteDTO.getText());
+        QuoteDTO newQuote = quoteService.addQuote(quoteDTO);
+        return new ResponseEntity<>(newQuote, HttpStatus.CREATED); // Возвращаем HTTP 201 Created
     }
 }
