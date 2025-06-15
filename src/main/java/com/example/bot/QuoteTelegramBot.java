@@ -1,7 +1,7 @@
-package com.example.quotebot.bot;
+package com.example.quotebot;
 
-import com.example.quotebot.model.Quote;
-import com.example.quotebot.service.QuoteService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -9,73 +9,62 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Optional;
-
 @Component
+@Slf4j
 public class QuoteTelegramBot extends TelegramLongPollingBot {
 
-    private final String botUsername;
     private final QuoteService quoteService;
 
-    public QuoteTelegramBot(@Value("7657364648:AAG4PUBlXQDsGRCE9EtSsJzcj8in-gUYdGY") String botToken,
-                            @Value("@quotedays_bot") String botUsername,
-                            QuoteService quoteService) {
-        super(botToken);
-        this.botUsername = botUsername;
+    @Value("7657364648:AAG4PUBlXQDsGRCE9EtSsJzcj8in-gUYdGY")
+    private String botToken;
+
+    @Value("@quotedays_bot")
+    private String botName;
+
+    @Autowired
+    public QuoteTelegramBot(QuoteService quoteService) {
         this.quoteService = quoteService;
     }
 
     @Override
+    public String getBotUsername() {
+        return botName;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
+
+    @Override
     public void onUpdateReceived(Update update) {
-        // Проверяем, есть ли в обновлении сообщение и текст в нем
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            switch (messageText) {
-                case "/start":
-                    sendWelcomeMessage(chatId);
-                    break;
-                case "/quote":
-                    sendRandomQuote(chatId);
-                    break;
-                default:
-                    sendMessage(chatId, "Неизвестная команда. Используйте /quote, чтобы получить цитату дня.");
-                    break;
+            log.info("Сообщение от chatId {}: {}", chatId, messageText);
+
+            if (messageText.equals("/start")) {
+                SendMessage message = new SendMessage();
+                message.setChatId(String.valueOf(chatId));
+                message.setText("Привет! Я QuoteBot. Отправьте /quote, чтобы получить случайную цитату.");
+                try {
+                    execute(message);
+                    log.info("Ответ отправлен chatId {}: {}", chatId);
+                } catch (TelegramApiException e) {
+                    log.error("Ошибка при отправке ответа chatId {}: {}", chatId, e.getMessage());
+                }
+            } else {
+                SendMessage message = new SendMessage();
+                message.setChatId(String.valueOf(chatId));
+                message.setText("Я не понимаю эту команду.");
+                try {
+                    execute(message);
+                    log.info("Ответ об неизвестной команде отправлен chatId {}: {}", chatId);
+                } catch (TelegramApiException e) {
+                    log.error("Ошибка при отправке ответа об неизвестной команде chatId {}: {}", chatId, e.getMessage());
+                }
             }
         }
-    }
-
-    private void sendWelcomeMessage(long chatId) {
-        String welcomeText = "Привет! Я бот, который присылает цитаты. \n" +
-                "Используй команду /quote, чтобы получить свою цитату на день.";
-        sendMessage(chatId, welcomeText);
-    }
-
-    private void sendRandomQuote(long chatId) {
-        Optional<Quote> randomQuoteOpt = quoteService.getRandomQuote();
-        if (randomQuoteOpt.isPresent()) {
-            Quote quote = randomQuoteOpt.get();
-            String quoteText = String.format("\"%s\"\n\n— %s", quote.getText(), quote.getAuthor());
-            sendMessage(chatId, quoteText);
-        } else {
-            sendMessage(chatId, "Извините, в моей базе пока нет цитат. Попробуйте позже.");
-        }
-    }
-
-    private void sendMessage(long chatId, String text) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(text);
-        try {
-            execute(message); // Отправляем сообщение
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return botUsername;
     }
 }
