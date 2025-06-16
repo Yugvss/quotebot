@@ -1,8 +1,8 @@
 package com.example.service;
 
-import com.example.dto.QuoteDTO; // Создайте этот класс DTO, если его нет
-import com.example.exception.QuoteNotFoundException; // Создайте это исключение
-import com.example.mapper.QuoteMapper; // Создайте этот интерфейс Mapper
+import com.example.dto.QuoteDTO;
+import com.example.exception.QuoteNotFoundException;
+import com.example.mapper.QuoteMapper;
 import com.example.model.Quote;
 import com.example.repository.QuoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class QuoteService {
     private final QuoteRepository quoteRepository;
     private final QuoteMapper quoteMapper; // Инжектим маппер
 
-    @Transactional(readOnly = true) // Транзакция только для чтения, оптимизирует производительность
+    @Transactional(readOnly = true) // Транзакция только для чтения
     public QuoteDTO getRandomQuote() {
         log.info("Запрос на получение случайной цитаты.");
         return quoteRepository.findRandomQuote()
@@ -31,6 +31,7 @@ public class QuoteService {
         log.info("Добавление новой цитаты: {}", quoteDTO.getText());
         Quote quote = quoteMapper.toEntity(quoteDTO); // Маппим DTO в Entity
         Quote savedQuote = quoteRepository.save(quote); // Сохраняем в БД
+        log.info("Quote saved successfully with ID: {}", savedQuote.getId());
         return quoteMapper.toDto(savedQuote); // Возвращаем сохраненную цитату как DTO
     }
 }
